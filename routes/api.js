@@ -8,6 +8,11 @@ router.get("/health", (req, res, next) => {
 
 router.post("/shorten", (req, res) => {
   const { url } = req.body
+  console.log(url)
+  if (!url) {
+    res.status(400).send("url is not valid")
+    return
+  }
   // check duplicate
   const checkDuplicateQuery = `select * from hashlinks where original_url='${url}'`
   req.app.dbInstance.query(checkDuplicateQuery, (err, results) => {

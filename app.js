@@ -7,7 +7,7 @@ var indexRouter = require("./routes/index")
 const helmet = require("helmet")
 const cors = require("cors")
 const mysql = require("mysql")
-
+const bodyParser = require("body-parser")
 require("dotenv").config()
 var app = express()
 
@@ -29,7 +29,8 @@ dbConnection.connect((err) => {
   // attach to app
   app.dbInstance = dbConnection
 })
-
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(helmet())
 app.use(cors())
 
