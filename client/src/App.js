@@ -15,7 +15,10 @@ function App() {
     if (url !== "") {
       await http({
         method: "post",
-        url: "http://localhost:3000/api/shorten",
+        url:
+          process.env.NODE_ENV === "production"
+            ? `${window.location.href}api/shorten`
+            : "http://localhost:3000/api/shorten",
         headers: {
           "Content-Type": "application/json",
         },
