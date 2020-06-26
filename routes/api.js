@@ -6,6 +6,7 @@ router.get("/health", (req, res, next) => {
   res.status(200).send("api is up")
 })
 
+// shorten url
 router.post("/shorten", (req, res) => {
   const { url } = req.body
   console.log(url)
@@ -39,18 +40,20 @@ router.post("/shorten", (req, res) => {
   })
 })
 
-router.post("/original", (req, res) => {
-  const { type, hash } = req.body
+// get original url
+router.get("/:hash", (req, res) => {
+  const hash = req.params.hash
   console.log(hash)
   const checkExistingQuery = `select * from hashlinks where ${
-    type === "long" ? "long_hash" : "short_hash"
+    hash.length > 4 ? "long_hash" : "short_hash"
   }='${hash}'`
   req.app.dbInstance.query(checkExistingQuery, (err, results) => {
     if (err) {
       res.status(500).send("server error")
       console.error(err.message)
     } else if (results.length > 0) {
-      res.status(200).send(results[0].original_url)
+      // res.status(200).send(results[0].original_url)
+      res.redirect(results[0].original_url)
     } else {
       res.status(400).send("url does not exist")
     }

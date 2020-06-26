@@ -69,8 +69,38 @@ function App() {
         </form>
         {hashedUrls.longHash ? (
           <div className="result">
-            <div>{`Long URL: ${hashedUrls.longHash}`}</div>
-            <div>{`Short URL: ${hashedUrls.shortHash}`}</div>
+            <div>
+              <span>Long URL: </span>
+              <a
+                href={`${
+                  process.env.NODE_ENV === "production"
+                    ? `${window.location.href}api/`
+                    : "http://localhost:3000/api/"
+                }${hashedUrls.longHash}`}
+                target="_blank"
+              >
+                {`${
+                  process.env.NODE_ENV === "production"
+                    ? `${window.location.href}api/`
+                    : "http://localhost:3000/api/"
+                }${hashedUrls.longHash}`}
+              </a>
+            </div>
+            <div>
+              <span>short URL: </span>
+              <a
+                href={`${
+                  process.env.NODE_ENV === "production"
+                    ? `${window.location.href}api/`
+                    : "http://localhost:3000/api/"
+                }${hashedUrls.shortHash}`}
+                target="_blank"
+              >{`${
+                process.env.NODE_ENV === "production"
+                  ? `${window.location.href}api/`
+                  : "http://localhost:3000/api/"
+              }${hashedUrls.shortHash}`}</a>
+            </div>
           </div>
         ) : null}
         {error ? <div className="error">{error}</div> : null}

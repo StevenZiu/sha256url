@@ -43,6 +43,16 @@
       }
     }
   }
+  .result {
+    .link {
+      color: blue;
+      text-decoration: underline;
+      &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
+    }
+  }
   .header {
     grid-column: 2/3;
     grid-row: 1/2;

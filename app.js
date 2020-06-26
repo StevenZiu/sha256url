@@ -8,6 +8,7 @@ const helmet = require("helmet")
 const cors = require("cors")
 const mysql = require("mysql")
 const bodyParser = require("body-parser")
+const fs = require("fs")
 require("dotenv").config()
 var app = express()
 
@@ -42,9 +43,21 @@ app.use(logger("dev"))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
-app.use(express.static(path.join(__dirname, "public")))
+// app.use(express.static(path.join(__dirname, "public")))
 
 app.use("/api", indexRouter)
+
+// check build folder existing
+if (!fs.existsSync("./client/build")) {
+  console.error("client build app does not exist")
+} else {
+  // serve client as static
+  app.use(express.static(path.join(__dirname, "./client/build")))
+  // route to client code
+  app.get("/", function (req, res) {
+    res.sendFile(path.join(__dirname, "./client/build", "index.html"))
+  })
+}
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
