@@ -13,10 +13,10 @@ require("dotenv").config()
 var app = express()
 
 const dbConfig = {
-  user: "root",
-  password: "",
-  database: "sha256url",
-  host: "localhost",
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASSWORD || "",
+  database: process.env.DB_NAME || "sha256url",
+  host: process.env.DB_HOST || "localhost",
 }
 
 const dbConnection = mysql.createConnection(dbConfig)
