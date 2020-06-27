@@ -12,7 +12,9 @@ function App() {
   const [error, updateError] = useState("")
   const submitForm = async (event) => {
     event.preventDefault()
-    if (url !== "") {
+    if (url.indexOf("http://") === -1 && url.indexOf("https://") === -1) {
+      updateError("Please input full url with https:// or http://")
+    } else if (url !== "") {
       await http({
         method: "post",
         url:
@@ -74,15 +76,15 @@ function App() {
               <a
                 href={`${
                   process.env.NODE_ENV === "production"
-                    ? `${window.location.href}api/`
-                    : "http://localhost:3000/api/"
+                    ? `${window.location.href}`
+                    : "http://localhost:3000/"
                 }${hashedUrls.longHash}`}
                 target="_blank"
               >
                 {`${
                   process.env.NODE_ENV === "production"
-                    ? `${window.location.href}api/`
-                    : "http://localhost:3000/api/"
+                    ? `${window.location.href}`
+                    : "http://localhost:3000/"
                 }${hashedUrls.longHash}`}
               </a>
             </div>
@@ -91,14 +93,14 @@ function App() {
               <a
                 href={`${
                   process.env.NODE_ENV === "production"
-                    ? `${window.location.href}api/`
-                    : "http://localhost:3000/api/"
+                    ? `${window.location.href}`
+                    : "http://localhost:3000/"
                 }${hashedUrls.shortHash}`}
                 target="_blank"
               >{`${
                 process.env.NODE_ENV === "production"
-                  ? `${window.location.href}api/`
-                  : "http://localhost:3000/api/"
+                  ? `${window.location.href}`
+                  : "http://localhost:3000/"
               }${hashedUrls.shortHash}`}</a>
             </div>
           </div>

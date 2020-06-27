@@ -48,6 +48,24 @@ app.use(cookieParser())
 
 app.use("/api", indexRouter)
 
+// redirect shorten url to original one
+app.get("/:hash", (req, res) => {
+  const hash = req.params.hash
+  const checkExistingQuery = `select * from hashlinks where ${
+    hash.length > 4 ? "long_hash" : "short_hash"
+  }='${hash}'`
+  req.app.dbInstance.query(checkExistingQuery, (err, results) => {
+    if (err) {
+      res.status(500).send("server error")
+      console.error(err.message)
+    } else if (results.length > 0) {
+      // res.status(200).send(results[0].original_url)
+      res.redirect(results[0].original_url)
+    } else {
+      res.status(400).send("url does not exist")
+    }
+  })
+})
 // check build folder existing
 if (!fs.existsSync("./client/build")) {
   console.error("client build app does not exist")

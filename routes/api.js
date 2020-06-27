@@ -27,7 +27,20 @@ router.post("/shorten", (req, res) => {
     }
     // start shorten
     const longHash = sha256(url)
-    const shortHash = longHash.substr(0, 4)
+    let shortHash = longHash.substr(0, 4)
+    // check short hash duplicate
+    const shortHashCheking = `select * from hashlinks where short_hash='${shortHash}'`
+    // FIXME: need recursive checking, put it here temperarily
+    req.app.dbInstance.query(shortHashCheking, (err, results) => {
+      if (err) {
+        console.error(err.message)
+        res.status(500).send("server error")
+        return
+      } else if (results.length > 0) {
+        // short hash duplicate, generate new hash, need recursive check
+        shortHash = sha256(shortHash).substr(1, 5)
+      }
+    })
     const query = `insert into hashlinks (original_url, long_hash, short_hash) values ('${url}', '${longHash}', '${shortHash}')`
     req.app.dbInstance.query(query, (err, results) => {
       if (err) {
@@ -41,23 +54,23 @@ router.post("/shorten", (req, res) => {
 })
 
 // get original url
-router.get("/:hash", (req, res) => {
-  const hash = req.params.hash
-  console.log(hash)
-  const checkExistingQuery = `select * from hashlinks where ${
-    hash.length > 4 ? "long_hash" : "short_hash"
-  }='${hash}'`
-  req.app.dbInstance.query(checkExistingQuery, (err, results) => {
-    if (err) {
-      res.status(500).send("server error")
-      console.error(err.message)
-    } else if (results.length > 0) {
-      // res.status(200).send(results[0].original_url)
-      res.redirect(results[0].original_url)
-    } else {
-      res.status(400).send("url does not exist")
-    }
-  })
-})
+// router.get("/:hash", (req, res) => {
+//   const hash = req.params.hash
+//   console.log(hash)
+//   const checkExistingQuery = `select * from hashlinks where ${
+//     hash.length > 4 ? "long_hash" : "short_hash"
+//   }='${hash}'`
+//   req.app.dbInstance.query(checkExistingQuery, (err, results) => {
+//     if (err) {
+//       res.status(500).send("server error")
+//       console.error(err.message)
+//     } else if (results.length > 0) {
+//       // res.status(200).send(results[0].original_url)
+//       res.redirect(results[0].original_url)
+//     } else {
+//       res.status(400).send("url does not exist")
+//     }
+//   })
+// })
 
 module.exports = router

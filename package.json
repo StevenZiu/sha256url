@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node ./bin/www",
     "dev": "nodemon",
-    "build-client": "cd client && npm i && npm run build"
+    "build-client": "cd client && npm i && npm run build",
+    "build-static": "cd client && npm run build"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
