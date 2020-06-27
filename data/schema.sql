@@ -7,5 +7,5 @@ create table if not exists hashlinks (
   long_hash varchar(400) not null,
   short_hash varchar(10) not null,
   primary key(url_id),
-  unique(original_url) 
+  unique(original_url, short_hash) 
 )
