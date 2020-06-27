@@ -15,8 +15,9 @@ var app = express()
 const dbConfig = {
   user: process.env.DB_USER || "root",
   password: process.env.DB_PASSWORD || "",
-  database: process.env.DB_NAME || "sha256url",
+  database: process.env.DB_DATABASE || "sha256url",
   host: process.env.DB_HOST || "localhost",
+  socketPath: process.env.DB_SOCKET || "",
 }
 
 const dbConnection = mysql.createConnection(dbConfig)
