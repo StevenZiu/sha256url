@@ -1,6 +1,8 @@
-### Simple sha256 url shortener && expander
+### Simple sha256 url shortener && expander 
+![CI/CD to Google App Engine](https://github.com/StevenZiu/sha256url/workflows/CI/CD%20to%20Google%20App%20Engine/badge.svg?branch=master)
 
 #### Use sha256 to generate shorten url and long hashed url.
+Check this live [Demo](https://sha256url.uc.r.appspot.com/)
 
 ### Development
 
