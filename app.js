@@ -9,9 +9,20 @@ const cors = require("cors")
 const mysql = require("mysql")
 const bodyParser = require("body-parser")
 const fs = require("fs")
+const slowDown = require("express-slow-down")
+
 require("dotenv").config()
 var app = express()
-
+const speedLimiter = slowDown({
+  windowMs: 5 * 60 * 1000, // 5 minutes
+  delayAfter: 10, // allow 10 requests per 5 minutes, then...
+  delayMs: 1000 * 60 * 1, // begin adding 1min of delay per request above 5:
+  // request # 101 is delayed by 1min
+  // request # 102 is delayed by 2min
+  // request # 103 is delayed by 3min
+  // etc.
+})
+app.use(speedLimiter)
 const dbConfig = {
   user: process.env.DB_USER || "root",
   password: process.env.DB_PASSWORD || "",
